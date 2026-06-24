@@ -67,6 +67,19 @@ npm run dev:electron
 npm run build
 ```
 
+## Backend layout
+
+```text
+backend/app/
+  main.py              # FastAPI app setup, middleware, router registration
+  database.py          # SQLite connection and session dependency
+  models.py            # SQLModel database tables
+  schemas.py           # Pydantic API request models
+  routers/             # HTTP endpoints grouped by feature
+  services/            # Business logic and database operations
+  utils/               # Shared helpers
+```
+
 ## Prompt interval
 
 The React app prompts every 30 minutes by default. Override this during
