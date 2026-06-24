@@ -1,0 +1,270 @@
+:root {
+  color: #172033;
+  background: #eef2f7;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 360px;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0.8rem 1rem;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
+}
+
+button:hover {
+  background: #1d4ed8;
+  box-shadow: 0 10px 25px rgb(37 99 235 / 20%);
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+button.secondary {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+button.secondary:hover {
+  background: #cbd5e1;
+  box-shadow: none;
+}
+
+button.danger {
+  background: #dc2626;
+}
+
+button.icon-button {
+  align-items: center;
+  background: #e2e8f0;
+  border-radius: 999px;
+  color: #0f172a;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+}
+
+input,
+textarea {
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  color: #0f172a;
+  margin-top: 0.35rem;
+  padding: 0.75rem 0.85rem;
+  width: 100%;
+}
+
+textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+label {
+  color: #334155;
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.app-shell {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 2rem;
+}
+
+.hero,
+.card {
+  background: rgb(255 255 255 / 92%);
+  border: 1px solid rgb(226 232 240 / 90%);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgb(15 23 42 / 8%);
+}
+
+.hero {
+  align-items: center;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding: 2rem;
+}
+
+.hero h1,
+.card h2 {
+  color: #0f172a;
+  margin: 0;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+  max-width: 740px;
+}
+
+.hero p {
+  color: #475569;
+  max-width: 720px;
+}
+
+.eyebrow {
+  color: #2563eb;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+
+.card {
+  margin-bottom: 1rem;
+  padding: 1.4rem;
+}
+
+.active-card,
+.section-heading,
+.summary-row,
+.entry-row,
+.prompt-actions {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.card-actions,
+.prompt-actions {
+  flex-wrap: wrap;
+}
+
+.controls-grid,
+.summary-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.summary-list,
+.entry-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.summary-row,
+.entry-row {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.summary-row span,
+.entry-row span,
+.entry-row small,
+.muted {
+  color: #64748b;
+}
+
+.entry-row {
+  align-items: end;
+  display: grid;
+  grid-template-columns: minmax(180px, 1.6fr) minmax(120px, 0.7fr) minmax(160px, 1fr) auto;
+}
+
+.entry-row strong,
+.entry-row span,
+.entry-row small {
+  display: block;
+}
+
+.error-banner {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  color: #991b1b;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.modal-backdrop {
+  align-items: center;
+  background: rgb(15 23 42 / 52%);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  z-index: 20;
+}
+
+.prompt-modal {
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 40px 100px rgb(15 23 42 / 30%);
+  display: grid;
+  gap: 1rem;
+  max-width: 620px;
+  padding: 1.5rem;
+  width: min(100%, 620px);
+}
+
+.active-note {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  color: #1e3a8a;
+  margin: 0;
+  padding: 0.75rem;
+}
+
+@media (max-width: 820px) {
+  .app-shell {
+    padding: 1rem;
+  }
+
+  .hero,
+  .active-card,
+  .section-heading,
+  .summary-row,
+  .prompt-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .controls-grid,
+  .summary-grid,
+  .entry-row {
+    grid-template-columns: 1fr;
+  }
+}
