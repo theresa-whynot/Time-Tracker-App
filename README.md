@@ -80,6 +80,18 @@ backend/app/
   utils/               # Shared helpers
 ```
 
+## Frontend layout
+
+```text
+frontend/src/
+  App.tsx              # Top-level page composition
+  api/                 # Backend API client functions and response types
+  components/          # Reusable UI sections and form components
+  hooks/               # React state/effects for dashboard behavior
+  utils/               # Date and formatting helpers
+  config.ts            # Frontend environment-derived settings
+```
+
 ## Prompt interval
 
 The React app prompts every 30 minutes by default. Override this during
