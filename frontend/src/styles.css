@@ -1,6 +1,6 @@
 :root {
-  color: #172033;
-  background: #eef2f7;
+  color: #f8fafc;
+  background: #111113;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -12,6 +12,9 @@
 }
 
 body {
+  background:
+    radial-gradient(circle at top left, rgb(220 38 38 / 18%), transparent 32rem),
+    linear-gradient(135deg, #171717 0%, #252525 52%, #101010 100%);
   margin: 0;
   min-width: 360px;
   min-height: 100vh;
@@ -26,7 +29,7 @@ textarea {
 button {
   border: 0;
   border-radius: 12px;
-  background: #2563eb;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
   color: white;
   cursor: pointer;
   font-weight: 700;
@@ -38,8 +41,8 @@ button {
 }
 
 button:hover {
-  background: #1d4ed8;
-  box-shadow: 0 10px 25px rgb(37 99 235 / 20%);
+  background: linear-gradient(135deg, #f87171, #dc2626);
+  box-shadow: 0 14px 32px rgb(220 38 38 / 24%);
   transform: translateY(-1px);
 }
 
@@ -49,24 +52,25 @@ button:disabled {
 }
 
 button.secondary {
-  background: #e2e8f0;
-  color: #1e293b;
+  background: #2d2d30;
+  border: 1px solid #4b4b50;
+  color: #f8fafc;
 }
 
 button.secondary:hover {
-  background: #cbd5e1;
-  box-shadow: none;
+  background: #3a3a3f;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 24%);
 }
 
 button.danger {
-  background: #dc2626;
+  background: #991b1b;
 }
 
 button.icon-button {
   align-items: center;
-  background: #e2e8f0;
+  background: #2d2d30;
   border-radius: 999px;
-  color: #0f172a;
+  color: #f8fafc;
   display: inline-flex;
   height: 36px;
   justify-content: center;
@@ -76,13 +80,25 @@ button.icon-button {
 
 input,
 textarea {
-  background: white;
-  border: 1px solid #cbd5e1;
+  background: #18181b;
+  border: 1px solid #3f3f46;
   border-radius: 10px;
-  color: #0f172a;
+  color: #f8fafc;
   margin-top: 0.35rem;
   padding: 0.75rem 0.85rem;
   width: 100%;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgb(239 68 68 / 18%);
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #71717a;
 }
 
 textarea {
@@ -91,7 +107,7 @@ textarea {
 }
 
 label {
-  color: #334155;
+  color: #d4d4d8;
   display: block;
   font-size: 0.92rem;
   font-weight: 700;
@@ -105,14 +121,18 @@ label {
 
 .hero,
 .card {
-  background: rgb(255 255 255 / 92%);
-  border: 1px solid rgb(226 232 240 / 90%);
+  background: rgb(31 31 35 / 88%);
+  border: 1px solid rgb(82 82 91 / 70%);
   border-radius: 24px;
-  box-shadow: 0 24px 60px rgb(15 23 42 / 8%);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 24%);
+  backdrop-filter: blur(18px);
 }
 
 .hero {
   align-items: center;
+  background:
+    linear-gradient(135deg, rgb(39 39 42 / 94%), rgb(24 24 27 / 94%)),
+    radial-gradient(circle at top right, rgb(239 68 68 / 24%), transparent 26rem);
   display: flex;
   gap: 1.5rem;
   justify-content: space-between;
@@ -122,7 +142,7 @@ label {
 
 .hero h1,
 .card h2 {
-  color: #0f172a;
+  color: #fafafa;
   margin: 0;
 }
 
@@ -133,12 +153,12 @@ label {
 }
 
 .hero p {
-  color: #475569;
+  color: #a1a1aa;
   max-width: 720px;
 }
 
 .eyebrow {
-  color: #2563eb;
+  color: #f87171;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -163,7 +183,11 @@ label {
 }
 
 .card-actions,
-.prompt-actions {
+.prompt-actions,
+.summary-actions {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -183,17 +207,21 @@ label {
 
 .summary-row,
 .entry-row {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #18181b;
+  border: 1px solid #3f3f46;
   border-radius: 16px;
   padding: 1rem;
+}
+
+.summary-row {
+  border-left: 3px solid #dc2626;
 }
 
 .summary-row span,
 .entry-row span,
 .entry-row small,
 .muted {
-  color: #64748b;
+  color: #a1a1aa;
 }
 
 .entry-row {
@@ -209,17 +237,17 @@ label {
 }
 
 .error-banner {
-  background: #fee2e2;
-  border: 1px solid #fecaca;
+  background: rgb(127 29 29 / 38%);
+  border: 1px solid #991b1b;
   border-radius: 14px;
-  color: #991b1b;
+  color: #fecaca;
   margin-bottom: 1rem;
   padding: 1rem;
 }
 
 .modal-backdrop {
   align-items: center;
-  background: rgb(15 23 42 / 52%);
+  background: rgb(0 0 0 / 64%);
   display: flex;
   inset: 0;
   justify-content: center;
@@ -229,9 +257,10 @@ label {
 }
 
 .prompt-modal {
-  background: white;
+  background: #202024;
+  border: 1px solid #52525b;
   border-radius: 28px;
-  box-shadow: 0 40px 100px rgb(15 23 42 / 30%);
+  box-shadow: 0 40px 100px rgb(0 0 0 / 52%);
   display: grid;
   gap: 1rem;
   max-width: 620px;
@@ -240,10 +269,10 @@ label {
 }
 
 .active-note {
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
+  background: rgb(127 29 29 / 30%);
+  border: 1px solid #991b1b;
   border-radius: 12px;
-  color: #1e3a8a;
+  color: #fecaca;
   margin: 0;
   padding: 0.75rem;
 }
