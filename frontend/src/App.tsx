@@ -32,8 +32,16 @@ export default function App() {
       />
 
       <div className="summary-grid">
-        <SummaryCard title="End-of-day summary" summary={dashboard.daySummary} />
-        <SummaryCard title="End-of-week summary" summary={dashboard.weekSummary} />
+        <SummaryCard
+          csvFilename={`time-summary-day-${dashboard.day}.csv`}
+          title="End-of-day summary"
+          summary={dashboard.daySummary}
+        />
+        <SummaryCard
+          csvFilename={`time-summary-week-${dashboard.weekStart}.csv`}
+          title="End-of-week summary"
+          summary={dashboard.weekSummary}
+        />
       </div>
 
       <ManualAdjustments daySummary={dashboard.daySummary} onEntrySaved={dashboard.refresh} />
