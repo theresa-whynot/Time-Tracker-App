@@ -3,7 +3,7 @@ import type { Summary } from "../api";
 function csvCell(value: string | number): string {
   const text = String(value);
   if (/[",\n]/.test(text)) {
-    return `"${text.replaceAll('"', '""')}"`;
+    return `"${text.replace(/"/g, '""')}"`;
   }
   return text;
 }
