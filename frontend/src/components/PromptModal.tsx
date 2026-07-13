@@ -1,11 +1,13 @@
 import { FormEvent, useState } from "react";
 
 import type { TimeEntry, WorkPrompt } from "../api";
+import { DEFAULT_PROJECT_NAME } from "../config";
 
-function emptyPrompt(): WorkPrompt {
+type PromptForm = Omit<WorkPrompt, "project_name">;
+
+function emptyPrompt(): PromptForm {
   return {
     client_name: "",
-    project_name: "",
     task_name: "",
     description: "",
   };
@@ -19,10 +21,9 @@ interface PromptModalProps {
 }
 
 export function PromptModal({ active, onDismiss, onSubmit, onStop }: PromptModalProps) {
-  const [prompt, setPrompt] = useState<WorkPrompt>(() => ({
+  const [prompt, setPrompt] = useState<PromptForm>(() => ({
     ...emptyPrompt(),
     client_name: active?.client_name ?? "",
-    project_name: active?.project_name ?? "",
     task_name: active?.task_name ?? "",
     description: active?.description ?? "",
   }));
@@ -32,13 +33,16 @@ export function PromptModal({ active, onDismiss, onSubmit, onStop }: PromptModal
     event.preventDefault();
     setSubmitting(true);
     try {
-      await onSubmit(prompt);
+      await onSubmit({
+        ...prompt,
+        project_name: DEFAULT_PROJECT_NAME,
+      });
     } finally {
       setSubmitting(false);
     }
   }
 
-  function updateField(field: keyof WorkPrompt, value: string) {
+  function updateField(field: keyof PromptForm, value: string) {
     setPrompt((current) => ({ ...current, [field]: value }));
   }
 
@@ -69,15 +73,6 @@ export function PromptModal({ active, onDismiss, onSubmit, onStop }: PromptModal
             value={prompt.client_name}
             onChange={(event) => updateField("client_name", event.target.value)}
             placeholder="Acme Co."
-          />
-        </label>
-        <label>
-          Project
-          <input
-            required
-            value={prompt.project_name}
-            onChange={(event) => updateField("project_name", event.target.value)}
-            placeholder="Website redesign"
           />
         </label>
         <label>

@@ -1,4 +1,5 @@
 import type { Summary } from "../api";
+import { DEFAULT_PROJECT_NAME } from "../config";
 import { downloadSummaryCsv } from "../utils/csv";
 import { formatDuration } from "../utils/formatters";
 
@@ -48,7 +49,9 @@ export function SummaryCard({ csvFilename, title, summary }: SummaryCardProps) {
               <div>
                 <strong>{bucket.task_name}</strong>
                 <span>
-                  {bucket.client_name} / {bucket.project_name}
+                  {bucket.project_name === DEFAULT_PROJECT_NAME
+                    ? bucket.client_name
+                    : `${bucket.client_name} / ${bucket.project_name}`}
                 </span>
               </div>
               <strong>{formatDuration(bucket.duration_seconds)}</strong>
