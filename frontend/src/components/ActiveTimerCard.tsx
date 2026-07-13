@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import type { TimeEntry } from "../api";
-import { formatDuration } from "../utils/formatters";
+import { formatLiveDuration } from "../utils/formatters";
 
 interface ActiveTimerCardProps {
   active: TimeEntry | null;
@@ -47,7 +47,7 @@ export function ActiveTimerCard({ active, onOpenPrompt, onStop }: ActiveTimerCar
           <>
             <h2>{active.task_name}</h2>
             <p>{active.client_name}</p>
-            <strong>{formatDuration(liveDurationSeconds)}</strong>
+            <strong>{formatLiveDuration(liveDurationSeconds)}</strong>
           </>
         ) : (
           <>
