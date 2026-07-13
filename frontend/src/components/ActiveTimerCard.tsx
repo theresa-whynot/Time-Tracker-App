@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import type { TimeEntry } from "../api";
 import { formatDuration } from "../utils/formatters";
 
@@ -7,7 +9,36 @@ interface ActiveTimerCardProps {
   onStop: () => Promise<void>;
 }
 
+function currentDurationSeconds(entry: TimeEntry): number {
+  const startedAt = Date.parse(entry.started_at);
+  const endedAt = entry.ended_at ? Date.parse(entry.ended_at) : Date.now();
+  const elapsedSeconds = Math.max(0, Math.floor((endedAt - startedAt) / 1000));
+  return Math.max(0, elapsedSeconds + entry.seconds_adjustment);
+}
+
 export function ActiveTimerCard({ active, onOpenPrompt, onStop }: ActiveTimerCardProps) {
+  const [liveDurationSeconds, setLiveDurationSeconds] = useState(
+    active ? currentDurationSeconds(active) : 0,
+  );
+
+  useEffect(() => {
+    if (!active) {
+      setLiveDurationSeconds(0);
+      return;
+    }
+
+    setLiveDurationSeconds(currentDurationSeconds(active));
+    if (active.ended_at) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setLiveDurationSeconds(currentDurationSeconds(active));
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [active]);
+
   return (
     <section className="card active-card">
       <div>
@@ -15,10 +46,8 @@ export function ActiveTimerCard({ active, onOpenPrompt, onStop }: ActiveTimerCar
         {active ? (
           <>
             <h2>{active.task_name}</h2>
-            <p>
-              {active.client_name} / {active.project_name}
-            </p>
-            <strong>{formatDuration(active.duration_seconds)}</strong>
+            <p>{active.client_name}</p>
+            <strong>{formatDuration(liveDurationSeconds)}</strong>
           </>
         ) : (
           <>

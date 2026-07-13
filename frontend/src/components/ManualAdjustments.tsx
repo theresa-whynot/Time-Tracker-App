@@ -13,8 +13,8 @@ export function ManualAdjustments({ daySummary, onEntrySaved }: ManualAdjustment
         <div>
           <h2>Manual adjustments</h2>
           <p className="muted">
-            Adjust entries after reviewing the daily or weekly summary. Positive or
-            negative minutes are added to the original tracked duration.
+            Review the minutes already logged for each entry and edit the total if it
+            needs to be corrected.
           </p>
         </div>
       </div>
