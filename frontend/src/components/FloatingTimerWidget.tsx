@@ -2,20 +2,19 @@ import { useCallback, useEffect, useState } from "react";
 
 import { getActiveTimer, stopTimer } from "../api";
 import type { TimeEntry } from "../api";
+import { useLiveTimeEntryDuration } from "../hooks/useLiveTimeEntryDuration";
 import { formatLiveDuration } from "../utils/formatters";
-import { currentTimeEntryDurationSeconds } from "../utils/timeEntries";
 
 export function FloatingTimerWidget() {
   const [active, setActive] = useState<TimeEntry | null>(null);
-  const [durationSeconds, setDurationSeconds] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [stopping, setStopping] = useState(false);
+  const durationSeconds = useLiveTimeEntryDuration(active);
 
   const refresh = useCallback(async () => {
     try {
       const activeTimer = await getActiveTimer();
       setActive(activeTimer);
-      setDurationSeconds(activeTimer ? currentTimeEntryDurationSeconds(activeTimer) : 0);
       setError(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Unable to load timer.");
@@ -28,24 +27,6 @@ export function FloatingTimerWidget() {
 
     return () => window.clearInterval(intervalId);
   }, [refresh]);
-
-  useEffect(() => {
-    if (!active) {
-      setDurationSeconds(0);
-      return;
-    }
-
-    setDurationSeconds(currentTimeEntryDurationSeconds(active));
-    if (active.ended_at) {
-      return;
-    }
-
-    const intervalId = window.setInterval(() => {
-      setDurationSeconds(currentTimeEntryDurationSeconds(active));
-    }, 1000);
-
-    return () => window.clearInterval(intervalId);
-  }, [active]);
 
   async function handleOpenPrompt() {
     await window.timeTracker?.openPrompt();

@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-
 import type { TimeEntry } from "../api";
+import { useLiveTimeEntryDuration } from "../hooks/useLiveTimeEntryDuration";
 import { formatLiveDuration } from "../utils/formatters";
-import { currentTimeEntryDurationSeconds } from "../utils/timeEntries";
 
 interface ActiveTimerCardProps {
   active: TimeEntry | null;
@@ -11,27 +9,7 @@ interface ActiveTimerCardProps {
 }
 
 export function ActiveTimerCard({ active, onOpenPrompt, onStop }: ActiveTimerCardProps) {
-  const [liveDurationSeconds, setLiveDurationSeconds] = useState(
-    active ? currentTimeEntryDurationSeconds(active) : 0,
-  );
-
-  useEffect(() => {
-    if (!active) {
-      setLiveDurationSeconds(0);
-      return;
-    }
-
-    setLiveDurationSeconds(currentTimeEntryDurationSeconds(active));
-    if (active.ended_at) {
-      return;
-    }
-
-    const intervalId = window.setInterval(() => {
-      setLiveDurationSeconds(currentTimeEntryDurationSeconds(active));
-    }, 1000);
-
-    return () => window.clearInterval(intervalId);
-  }, [active]);
+  const liveDurationSeconds = useLiveTimeEntryDuration(active);
 
   return (
     <section className="card active-card">
