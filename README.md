@@ -18,12 +18,14 @@ and task.
   - daily and weekly summaries
   - manual time-entry adjustments after reviewing summaries
 - A React dashboard that:
-  - prompts for current client, project, task, and notes on launch
+  - prompts for current client, task, and notes on launch
+  - saves entered client names in local storage for later re-selection
   - repeats the prompt on a configurable interval
   - shows the active timer and day/week summaries
   - lets the user adjust entries from the day summary
 - An Electron shell that:
   - wraps the React app as a desktop app
+  - keeps a compact live timer widget in the bottom-right of the desktop
   - briefly brings the app forward and flashes the window for prompts
   - releases always-on-top behavior automatically so prompts can be ignored
 

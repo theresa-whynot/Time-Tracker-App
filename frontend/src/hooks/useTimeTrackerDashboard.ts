@@ -51,6 +51,12 @@ export function useTimeTrackerDashboard() {
   }, [refresh]);
 
   useEffect(() => {
+    return window.timeTracker?.onOpenPrompt(() => {
+      setPromptOpen(true);
+    });
+  }, []);
+
+  useEffect(() => {
     openPrompt().catch((caught: Error) => setError(caught.message));
     const intervalId = window.setInterval(() => {
       openPrompt().catch((caught: Error) => setError(caught.message));
