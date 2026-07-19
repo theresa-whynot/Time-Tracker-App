@@ -1,6 +1,7 @@
 :root {
   color: #f8fafc;
   background: #111113;
+  color-scheme: dark;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -13,8 +14,9 @@
 
 body {
   background:
-    radial-gradient(circle at top left, rgb(220 38 38 / 18%), transparent 32rem),
-    linear-gradient(135deg, #171717 0%, #252525 52%, #101010 100%);
+    radial-gradient(circle at 16% 10%, rgb(248 113 113 / 16%), transparent 28rem),
+    radial-gradient(circle at 86% 18%, rgb(185 28 28 / 14%), transparent 24rem),
+    linear-gradient(135deg, #0d0d0f 0%, #202024 48%, #09090b 100%);
   margin: 0;
   min-width: 360px;
   min-height: 100vh;
@@ -35,12 +37,12 @@ textarea {
 
 button {
   border: 0;
-  border-radius: 12px;
+  border-radius: 999px;
   background: linear-gradient(135deg, #ef4444, #b91c1c);
   color: white;
   cursor: pointer;
   font-weight: 700;
-  padding: 0.8rem 1rem;
+  padding: 0.82rem 1.1rem;
   transition:
     transform 120ms ease,
     box-shadow 120ms ease,
@@ -49,7 +51,7 @@ button {
 
 button:hover {
   background: linear-gradient(135deg, #f87171, #dc2626);
-  box-shadow: 0 14px 32px rgb(220 38 38 / 24%);
+  box-shadow: 0 16px 34px rgb(220 38 38 / 30%);
   transform: translateY(-1px);
 }
 
@@ -59,8 +61,8 @@ button:disabled {
 }
 
 button.secondary {
-  background: #2d2d30;
-  border: 1px solid #4b4b50;
+  background: rgb(39 39 42 / 82%);
+  border: 1px solid rgb(113 113 122 / 48%);
   color: #f8fafc;
 }
 
@@ -87,9 +89,9 @@ button.icon-button {
 
 input,
 textarea {
-  background: #18181b;
-  border: 1px solid #3f3f46;
-  border-radius: 10px;
+  background: rgb(24 24 27 / 88%);
+  border: 1px solid rgb(82 82 91 / 72%);
+  border-radius: 14px;
   color: #f8fafc;
   margin-top: 0.35rem;
   padding: 0.75rem 0.85rem;
@@ -122,29 +124,98 @@ label {
 
 .app-shell {
   margin: 0 auto;
-  max-width: 1180px;
-  padding: 2rem;
+  max-width: 1220px;
+  padding: 2.25rem;
 }
 
 .hero,
 .card {
-  background: rgb(31 31 35 / 88%);
-  border: 1px solid rgb(82 82 91 / 70%);
-  border-radius: 24px;
-  box-shadow: 0 24px 60px rgb(0 0 0 / 24%);
-  backdrop-filter: blur(18px);
+  background: linear-gradient(180deg, rgb(39 39 42 / 82%), rgb(24 24 27 / 82%));
+  border: 1px solid rgb(113 113 122 / 28%);
+  border-radius: 28px;
+  box-shadow:
+    0 24px 80px rgb(0 0 0 / 32%),
+    inset 0 1px 0 rgb(255 255 255 / 5%);
+  backdrop-filter: blur(20px);
 }
 
 .hero {
+  align-items: start;
+  background:
+    radial-gradient(circle at 88% 16%, rgb(239 68 68 / 24%), transparent 20rem),
+    linear-gradient(135deg, rgb(39 39 42 / 96%), rgb(18 18 20 / 96%));
+  display: grid;
+  gap: 1.3rem;
+  margin-bottom: 1.35rem;
+  overflow: hidden;
+  padding: 2.35rem;
+  position: relative;
+}
+
+.hero::after {
+  background: linear-gradient(90deg, transparent, rgb(239 68 68 / 58%), transparent);
+  content: "";
+  height: 1px;
+  inset: auto 2rem 0;
+  position: absolute;
+}
+
+.hero-brand {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.hero-icon {
   align-items: center;
   background:
-    linear-gradient(135deg, rgb(39 39 42 / 94%), rgb(24 24 27 / 94%)),
-    radial-gradient(circle at top right, rgb(239 68 68 / 24%), transparent 26rem);
-  display: flex;
-  gap: 1.5rem;
-  justify-content: space-between;
-  margin-bottom: 1.25rem;
-  padding: 2rem;
+    radial-gradient(circle at 35% 28%, rgb(248 113 113 / 52%), transparent 36%),
+    linear-gradient(135deg, #3f3f46, #18181b);
+  border: 1px solid rgb(248 113 113 / 38%);
+  border-radius: 18px;
+  box-shadow: 0 16px 38px rgb(185 28 28 / 24%);
+  display: inline-flex;
+  height: 3rem;
+  justify-content: center;
+  position: relative;
+  width: 3rem;
+}
+
+.hero-icon::before {
+  border: 3px solid #f4f4f5;
+  border-radius: 999px;
+  content: "";
+  height: 1.45rem;
+  position: absolute;
+  width: 1.45rem;
+}
+
+.hero-icon span {
+  background: #f4f4f5;
+  border-radius: 999px;
+  height: 0.8rem;
+  position: relative;
+  transform: translate(0.18rem, -0.08rem) rotate(-38deg);
+  transform-origin: bottom center;
+  width: 3px;
+}
+
+.hero-icon span::after {
+  background: #ef4444;
+  border-radius: 999px;
+  content: "";
+  height: 0.55rem;
+  left: 0;
+  position: absolute;
+  top: 0.52rem;
+  transform: rotate(94deg);
+  transform-origin: top center;
+  width: 3px;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 1rem;
 }
 
 .hero h1,
@@ -154,14 +225,18 @@ label {
 }
 
 .hero h1 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  line-height: 1;
-  max-width: 740px;
+  font-size: clamp(2.6rem, 6vw, 5.2rem);
+  letter-spacing: -0.07em;
+  line-height: 0.92;
+  max-width: 860px;
 }
 
 .hero p {
-  color: #a1a1aa;
-  max-width: 720px;
+  color: #d4d4d8;
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 760px;
 }
 
 .eyebrow {
@@ -173,9 +248,41 @@ label {
   text-transform: uppercase;
 }
 
+.hero-brand .eyebrow {
+  margin: 0;
+}
+
+.hero-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.hero-highlights span {
+  background: rgb(24 24 27 / 74%);
+  border: 1px solid rgb(113 113 122 / 34%);
+  border-radius: 999px;
+  color: #f4f4f5;
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 0.55rem 0.78rem;
+}
+
 .card {
-  margin-bottom: 1rem;
-  padding: 1.4rem;
+  margin-bottom: 1.05rem;
+  padding: 1.5rem;
+  transition:
+    border-color 140ms ease,
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.card:hover {
+  border-color: rgb(161 161 170 / 38%);
+  box-shadow:
+    0 28px 86px rgb(0 0 0 / 36%),
+    inset 0 1px 0 rgb(255 255 255 / 6%);
+  transform: translateY(-1px);
 }
 
 .active-card,
@@ -214,9 +321,9 @@ label {
 
 .summary-row,
 .entry-row {
-  background: #18181b;
-  border: 1px solid #3f3f46;
-  border-radius: 16px;
+  background: linear-gradient(180deg, rgb(24 24 27 / 92%), rgb(18 18 20 / 92%));
+  border: 1px solid rgb(82 82 91 / 58%);
+  border-radius: 18px;
   padding: 1rem;
 }
 
@@ -264,8 +371,10 @@ label {
 }
 
 .prompt-modal {
-  background: #202024;
-  border: 1px solid #52525b;
+  background:
+    radial-gradient(circle at top right, rgb(239 68 68 / 14%), transparent 18rem),
+    #202024;
+  border: 1px solid rgb(113 113 122 / 46%);
   border-radius: 28px;
   box-shadow: 0 40px 100px rgb(0 0 0 / 52%);
   display: grid;
@@ -286,8 +395,8 @@ label {
 
 .floating-widget {
   background:
-    linear-gradient(135deg, rgb(39 39 42 / 98%), rgb(18 18 20 / 98%)),
-    radial-gradient(circle at top right, rgb(239 68 68 / 26%), transparent 12rem);
+    radial-gradient(circle at top right, rgb(239 68 68 / 28%), transparent 11rem),
+    linear-gradient(135deg, rgb(39 39 42 / 98%), rgb(18 18 20 / 98%));
   border: 1px solid rgb(113 113 122 / 72%);
   border-radius: 20px;
   box-shadow: 0 18px 44px rgb(0 0 0 / 46%);

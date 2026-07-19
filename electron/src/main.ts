@@ -22,10 +22,23 @@ let widgetCollapsed = false;
 function createClockIcon() {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-      <rect width="256" height="256" rx="58" fill="#18181b"/>
-      <circle cx="128" cy="128" r="82" fill="#27272a" stroke="#ef4444" stroke-width="16"/>
-      <path d="M128 76v58l40 28" fill="none" stroke="#fafafa" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="128" cy="128" r="9" fill="#ef4444"/>
+      <defs>
+        <linearGradient id="bg" x1="38" y1="26" x2="224" y2="236">
+          <stop stop-color="#3f3f46"/>
+          <stop offset="0.52" stop-color="#18181b"/>
+          <stop offset="1" stop-color="#09090b"/>
+        </linearGradient>
+        <linearGradient id="accent" x1="74" y1="42" x2="190" y2="220">
+          <stop stop-color="#fb7185"/>
+          <stop offset="1" stop-color="#b91c1c"/>
+        </linearGradient>
+      </defs>
+      <rect width="256" height="256" rx="58" fill="url(#bg)"/>
+      <circle cx="128" cy="128" r="86" fill="#27272a" stroke="url(#accent)" stroke-width="16"/>
+      <circle cx="128" cy="128" r="62" fill="#18181b" opacity="0.58"/>
+      <path d="M128 72v60l42 28" fill="none" stroke="#fafafa" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="128" cy="128" r="10" fill="#fb7185"/>
+      <path d="M71 203c21 18 48 28 78 24 42-5 74-35 87-74" fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
     </svg>
   `;
 
