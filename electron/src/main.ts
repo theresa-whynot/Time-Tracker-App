@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen, shell } from "electron";
+import { app, BrowserWindow, ipcMain, nativeImage, screen, shell } from "electron";
 import path from "node:path";
 
 let mainWindow: BrowserWindow | null = null;
@@ -7,10 +7,34 @@ let attentionTimer: NodeJS.Timeout | null = null;
 
 const devServerUrl = process.env.ELECTRON_START_URL;
 const widgetBounds = {
-  width: 340,
-  height: 190,
+  expanded: {
+    width: 340,
+    height: 190,
+  },
+  collapsed: {
+    width: 220,
+    height: 58,
+  },
   margin: 18,
 };
+let widgetCollapsed = false;
+
+function createClockIcon() {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+      <rect width="256" height="256" rx="58" fill="#18181b"/>
+      <circle cx="128" cy="128" r="82" fill="#27272a" stroke="#ef4444" stroke-width="16"/>
+      <path d="M128 76v58l40 28" fill="none" stroke="#fafafa" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="128" cy="128" r="9" fill="#ef4444"/>
+    </svg>
+  `;
+
+  return nativeImage.createFromDataURL(
+    `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
+  );
+}
+
+const clockIcon = createClockIcon();
 
 function releaseAttention() {
   if (!mainWindow) {
@@ -68,12 +92,24 @@ function positionWidgetWindow() {
     return;
   }
 
+  const currentBounds = widgetCollapsed ? widgetBounds.collapsed : widgetBounds.expanded;
   const { workArea } = screen.getPrimaryDisplay();
   widgetWindow.setBounds({
-    width: widgetBounds.width,
-    height: widgetBounds.height,
-    x: workArea.x + workArea.width - widgetBounds.width - widgetBounds.margin,
-    y: workArea.y + workArea.height - widgetBounds.height - widgetBounds.margin,
+    width: currentBounds.width,
+    height: currentBounds.height,
+    x: workArea.x + workArea.width - currentBounds.width - widgetBounds.margin,
+    y: workArea.y + workArea.height - currentBounds.height - widgetBounds.margin,
+  });
+}
+
+function setWidgetCollapsed(collapsed: boolean) {
+  widgetCollapsed = collapsed;
+  positionWidgetWindow();
+}
+
+function broadcastTimerChanged() {
+  BrowserWindow.getAllWindows().forEach((window) => {
+    window.webContents.send("timer:changed");
   });
 }
 
@@ -104,6 +140,7 @@ function createMainWindow() {
     height: 820,
     minWidth: 900,
     minHeight: 640,
+    icon: clockIcon,
     show: false,
     title: "Time Tracker App",
     webPreferences: {
@@ -131,14 +168,15 @@ function createMainWindow() {
 
 function createWidgetWindow() {
   widgetWindow = new BrowserWindow({
-    width: widgetBounds.width,
-    height: widgetBounds.height,
+    width: widgetBounds.expanded.width,
+    height: widgetBounds.expanded.height,
     frame: false,
     resizable: false,
     maximizable: false,
     minimizable: false,
     movable: false,
     alwaysOnTop: true,
+    icon: clockIcon,
     skipTaskbar: true,
     title: "Time Tracker Widget",
     webPreferences: {
@@ -170,7 +208,19 @@ ipcMain.handle("prompt:open", () => {
   openMainPrompt();
 });
 
+ipcMain.handle("timer:changed", () => {
+  broadcastTimerChanged();
+});
+
+ipcMain.handle("widget:set-collapsed", (_event, collapsed: boolean) => {
+  setWidgetCollapsed(collapsed);
+});
+
 app.whenReady().then(() => {
+  if (process.platform === "darwin") {
+    app.dock?.setIcon(clockIcon);
+  }
+
   createMainWindow();
   createWidgetWindow();
 

@@ -57,6 +57,12 @@ export function useTimeTrackerDashboard() {
   }, []);
 
   useEffect(() => {
+    return window.timeTracker?.onTimerChanged(() => {
+      refresh().catch((caught: Error) => setError(caught.message));
+    });
+  }, [refresh]);
+
+  useEffect(() => {
     openPrompt().catch((caught: Error) => setError(caught.message));
     const intervalId = window.setInterval(() => {
       openPrompt().catch((caught: Error) => setError(caught.message));
@@ -70,6 +76,7 @@ export function useTimeTrackerDashboard() {
       setError(null);
       try {
         await startTimer(prompt);
+        await window.timeTracker?.notifyTimerChanged();
         await dismissPrompt();
         await refresh();
       } catch (caught) {
@@ -83,6 +90,7 @@ export function useTimeTrackerDashboard() {
     setError(null);
     try {
       await stopTimer();
+      await window.timeTracker?.notifyTimerChanged();
       await dismissPrompt();
       await refresh();
     } catch (caught) {

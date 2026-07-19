@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { TimeEntry } from "../api";
 import { updateTimeEntry } from "../api";
 import { DEFAULT_PROJECT_NAME } from "../config";
-import { formatDateTime } from "../utils/formatters";
+import { formatDateTime, wholeMinutesFromSeconds } from "../utils/formatters";
 
 interface EntryAdjustmentRowProps {
   entry: TimeEntry;
@@ -16,13 +16,13 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
     [entry.duration_seconds, entry.seconds_adjustment],
   );
   const [loggedMinutes, setLoggedMinutes] = useState(
-    Math.round(entry.duration_seconds / 60).toString(),
+    wholeMinutesFromSeconds(entry.duration_seconds).toString(),
   );
   const [notes, setNotes] = useState(entry.notes);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setLoggedMinutes(Math.round(entry.duration_seconds / 60).toString());
+    setLoggedMinutes(wholeMinutesFromSeconds(entry.duration_seconds).toString());
     setNotes(entry.notes);
   }, [entry.duration_seconds, entry.notes]);
 
