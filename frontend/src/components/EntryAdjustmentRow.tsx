@@ -95,7 +95,7 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
         {saving ? "Saving..." : "Save"}
       </button>
       <button className="danger" disabled={deleting} onClick={handleDelete} type="button">
-        {deleting ? "Deleting..." : "Delete"}
+        {deleting ? "Deleting..." : "Delete block"}
       </button>
     </article>
   );

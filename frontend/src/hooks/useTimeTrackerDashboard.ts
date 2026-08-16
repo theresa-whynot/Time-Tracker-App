@@ -34,6 +34,7 @@ export function useTimeTrackerDashboard() {
     setActive(activeTimer);
     setDaySummary(currentDay);
     setWeekSummary(currentWeek);
+    setError(null);
   }, [day, weekStart]);
 
   const openPrompt = useCallback(async () => {
