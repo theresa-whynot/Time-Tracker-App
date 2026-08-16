@@ -22,7 +22,7 @@ function defaultDateTime(value: string | undefined, hour: number): string {
 }
 
 function toIsoDateTime(value: string): string {
-  return new Date(value).toISOString();
+  return value.length === 16 ? `${value}:00+00:00` : value;
 }
 
 export function ManualTimeEntryForm({ onSaved, periodStart }: ManualTimeEntryFormProps) {
@@ -44,7 +44,7 @@ export function ManualTimeEntryForm({ onSaved, periodStart }: ManualTimeEntryFor
     setError(null);
 
     try {
-      if (new Date(endTime) < new Date(startTime)) {
+      if (new Date(toIsoDateTime(endTime)) < new Date(toIsoDateTime(startTime))) {
         throw new Error("End time must be after start time.");
       }
 
