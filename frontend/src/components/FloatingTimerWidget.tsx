@@ -64,7 +64,7 @@ export function FloatingTimerWidget() {
       <div className="widget-header">
         <div className="widget-title">
           <span className="widget-status-dot" aria-hidden="true" />
-          <span>{collapsed ? formatLiveDuration(durationSeconds) : "Time Tracker"}</span>
+          <span>{collapsed ? formatLiveDuration(durationSeconds) : "ClearHours"}</span>
         </div>
         <button
           className="widget-chrome-button"
@@ -90,7 +90,7 @@ export function FloatingTimerWidget() {
             <>
               <div className="widget-task">
                 <strong>No timer running</strong>
-                <span>Start a timer to keep this widget live.</span>
+            <span>Simple tracking, ready when you are.</span>
               </div>
               <div className="widget-duration">0:00</div>
             </>
