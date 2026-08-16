@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 
 import { createManualTimeEntry } from "../api";
 import { DEFAULT_PROJECT_NAME } from "../config";
@@ -38,11 +38,6 @@ export function ManualTimeEntryForm({ onSaved, periodStart }: ManualTimeEntryFor
   const [startTime, setStartTime] = useState(initialStart);
   const [taskName, setTaskName] = useState("");
 
-  useEffect(() => {
-    setStartTime(initialStart);
-    setEndTime(initialEnd);
-  }, [initialEnd, initialStart]);
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);
@@ -78,6 +73,10 @@ export function ManualTimeEntryForm({ onSaved, periodStart }: ManualTimeEntryFor
 
   return (
     <form className="manual-entry-form" onSubmit={handleSubmit}>
+      <div>
+        <h3>Add a missing time block</h3>
+        <p className="muted">Create a new client/task entry for time that was not captured.</p>
+      </div>
       <div className="manual-entry-grid">
         <label>
           Client

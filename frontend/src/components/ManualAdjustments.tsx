@@ -19,7 +19,11 @@ export function ManualAdjustments({ daySummary, onEntrySaved }: ManualAdjustment
           </p>
         </div>
       </div>
-      <ManualTimeEntryForm periodStart={daySummary?.start} onSaved={onEntrySaved} />
+      <ManualTimeEntryForm
+        key={daySummary?.start ?? "manual-entry-form"}
+        periodStart={daySummary?.start}
+        onSaved={onEntrySaved}
+      />
       {daySummary?.entries.length ? (
         <div className="entry-list">
           {daySummary.entries.map((entry) => (

@@ -8,8 +8,8 @@ let attentionTimer: NodeJS.Timeout | null = null;
 const devServerUrl = process.env.ELECTRON_START_URL;
 const widgetBounds = {
   expanded: {
-    width: 340,
-    height: 190,
+    width: 360,
+    height: 230,
   },
   collapsed: {
     width: 220,
