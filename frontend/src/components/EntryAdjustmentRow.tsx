@@ -16,18 +16,16 @@ function toDateTimeLocalValue(value: string | null): string {
     return "";
   }
 
-  const date = new Date(value);
-  const offsetMs = date.getTimezoneOffset() * 60 * 1000;
-  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
+  return value.slice(0, 16);
 }
 
 function toIsoDateTime(value: string): string {
-  return new Date(value).toISOString();
+  return value.length === 16 ? `${value}:00+00:00` : value;
 }
 
 function durationSecondsBetween(startedAt: string, endedAt: string): number {
-  const startedAtMs = new Date(startedAt).getTime();
-  const endedAtMs = new Date(endedAt).getTime();
+  const startedAtMs = new Date(toIsoDateTime(startedAt)).getTime();
+  const endedAtMs = new Date(toIsoDateTime(endedAt)).getTime();
   if (!Number.isFinite(startedAtMs) || !Number.isFinite(endedAtMs)) {
     return 0;
   }
@@ -92,7 +90,7 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
       return;
     }
 
-    if (new Date(endedAt) < new Date(startedAt)) {
+    if (new Date(toIsoDateTime(endedAt)) < new Date(toIsoDateTime(startedAt))) {
       window.alert("End time must be after start time.");
       return;
     }

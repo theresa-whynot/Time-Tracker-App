@@ -11,7 +11,8 @@
     "dev:backend": "cd backend && python3 -m uvicorn app.main:app --reload --port 8000",
     "dev:frontend": "npm --workspace frontend run dev -- --host 127.0.0.1",
     "dev:electron": "wait-on http://127.0.0.1:5173 http://127.0.0.1:8000/health && cross-env ELECTRON_START_URL=http://127.0.0.1:5173 npm --workspace electron run dev",
-    "build": "npm --workspace frontend run build && npm --workspace electron run build"
+    "build": "npm --workspace frontend run build && npm --workspace electron run build",
+    "test:smoke": "python3 scripts/smoke_test.py"
   },
   "devDependencies": {
     "concurrently": "^10.0.3",

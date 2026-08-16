@@ -155,7 +155,7 @@ function createMainWindow() {
     minHeight: 640,
     icon: clockIcon,
     show: false,
-    title: "Time Tracker App",
+    title: "ClearHours",
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -191,7 +191,7 @@ function createWidgetWindow() {
     alwaysOnTop: true,
     icon: clockIcon,
     skipTaskbar: true,
-    title: "Time Tracker Widget",
+    title: "ClearHours Widget",
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -230,9 +230,9 @@ ipcMain.handle("widget:set-collapsed", (_event, collapsed: boolean) => {
 });
 
 app.whenReady().then(() => {
-  app.setName("Time Tracker");
+  app.setName("ClearHours");
   if (process.platform === "win32") {
-    app.setAppUserModelId("com.time-tracker.app");
+    app.setAppUserModelId("com.clearhours.app");
   }
 
   if (process.platform === "darwin") {

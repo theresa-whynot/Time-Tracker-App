@@ -14,7 +14,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(
-    title="Time Tracker API",
+    title="ClearHours API",
     version="0.1.0",
     description="Local API for tracking time across clients, projects, and tasks.",
     lifespan=lifespan,

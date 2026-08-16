@@ -1,1 +1,1 @@
-"""FastAPI application package for the Time Tracker desktop app."""
+"""FastAPI application package for the ClearHours desktop app."""
