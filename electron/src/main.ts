@@ -20,30 +20,8 @@ const widgetBounds = {
 let widgetCollapsed = false;
 
 function createClockIcon() {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-      <defs>
-        <radialGradient id="bg" cx="35%" cy="28%" r="74%">
-          <stop stop-color="#3f3f46"/>
-          <stop offset="0.58" stop-color="#18181b"/>
-          <stop offset="1" stop-color="#09090b"/>
-        </radialGradient>
-        <linearGradient id="accent" x1="74" y1="42" x2="190" y2="220">
-          <stop stop-color="#fb7185"/>
-          <stop offset="1" stop-color="#b91c1c"/>
-        </linearGradient>
-      </defs>
-      <circle cx="128" cy="128" r="116" fill="url(#bg)"/>
-      <circle cx="128" cy="128" r="91" fill="#27272a" stroke="url(#accent)" stroke-width="16"/>
-      <circle cx="128" cy="128" r="63" fill="#18181b" opacity="0.64"/>
-      <path d="M128 72v60l42 28" fill="none" stroke="#fafafa" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="128" cy="128" r="10" fill="#fb7185"/>
-      <path d="M62 203c23 21 55 32 89 28 45-5 81-37 94-79" fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
-    </svg>
-  `;
-
   return nativeImage.createFromDataURL(
-    `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`,
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAFF0lEQVR42u2dTW7cMAxGc4wA3SQBMgHaAm2PlvvmIEU2KbIo4LqyLVH8+Uh9BLQLJrbfI6nx2NLdHYPBYDAYDAaDwWCUioeHrx8zg1dwIdiUgsApRDXoj4/fpgZlSAR+FramFCTmAN0L+KwQJKkIfgTM09N3laElA8kagteCrSUFRVCCrwH97XYTDQ0ZKIEyeCvYWlJQhEn4o+CtgUuFGBGB4BOCpwjG8DNAH5GBEjTg92Z9FvBXIvRWg2XhVwEvEaG0BCvDX1qCnn5fHfyoCGXmBWjwn59/fNxuP7vG599SAuOybwl+BHakFCMSEP7F0AZ+NSgBAPyRTH95+TU0PCtDGQm84F+BbwG9v/8yNEalmBUhvQQe8M/AzwIfFcJChLQSeMDvAa8NvUcG7TlCSgks4R9lvRT6+/v76ZDKoFkNeiUoD18TvJUAPSKUleCs9CPCtxTAUwKYVtCT/RrwNXu8pQBXIsxIAFcFrEq/JXwvATQlgGwFVqW/BV97Bu8lwFYEKwnCWoFF6feAHyGAtgThVcAi+73gRwmgIQFMFcgMP1IALwnCsx8ZfrQAmhKEVAHN7N/f4fO6lRstQEuCkTuGoVXAKvs97+WjCLCXQLMKwGd/ROlHEmC2FYRUAa3sjyr9aAJotQIXAayy3/tnXEQBpK3AtQpoCRCd/WgCzFQBKAGk2e99sREFaEkA1QYqZX8WAaCqQKXsRxUAugpQAArwnwCj5T965p9FAIkErTagJoBW/0fJfmQBpFXAdB5QrfxXFMC0DWgIsJ39R5f/DAJsJRj9NgApAFL2owsw2wZcBMjc/6sLoDoRrDgBXEmAaQkqTgCrCmDSBiwmgNEXdyvA79fXfwaKAHsJwiaCFSeAn2MPfj/QBAibCFYU4Ao+igQUgAJQgCj4CBJQAApAAaIFyPbTMAUwEADlOUEK4CwB2uPiFABAgMhXxyiAowRXt4ojXiDlrWAHEXrAR7xGnvpWMGoVkPxIFLWkDOyPQZnbALIEUM8FVnwgxEqEcg+EVJ4IIlcD+EfCsj8UilwNSj4UmrkKeEuQ7rHw6m3AuyXAvRhS8dUw1GoA+WoY24BfNeDbwYtLkFaAbAtEILYE+GViWAVsq4Ek+//+hsFFopJLIMn+o18y4QWo9o1AQ4SZ7G+NsLUCsywUiSSBtPf3CMClYsFFkC4Ve/VAS+h6wRkWi0aRQPq1Lwx+leXiESSwKP3uAmTdMCJaBOvS77prSMYtY5De+NEq/S7ZX2XTqMrwQ3YOy7ZtXDb4UNlfYePIqvBDdw/NtHVs5NKv2vBDst+6FVSQYAn4lq3Acvv4CPCSrWJhS79XK8gmgSd8iOz3kmB/xxBNhDPwI7uApYV/1Qo0JDiqBlsRPGXY/s+j45Kc4wh8KAFGJfg8Ec1qsBfBQob95x8dhyTr08MfkWB7QtJqcCZCSwaJEK3POPufUvBl4PdI0Dox6UXrEeFKirPR+7kz4HvhQ/b9UQmuTnDmIp7NEazG7PGOLFiVCn5Lgt4Tnb2oksrglelLwZcKoCnBjBSasDXgpxRgRgJLEaLG6Pmnh08RCH55CQhfUYJMIkjOrTx8LQlQZZg5l2XgH90nmLl4kTLMHvf+OtytFpoSeMmgdZxLg7esBppSWBzL8lkfKULkIHiBBBVEaJ0TSS8gAsEbiYAsw9HxkmTxqkDoAFXBU4izYyAhEBk0xOj9fJJIJsTs4JVeSApeQQaDwWAwGAwGg1Er/gACmY1qy0naHgAAAABJRU5ErkJggg==",
   );
 }
 
