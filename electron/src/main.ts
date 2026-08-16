@@ -8,8 +8,8 @@ let attentionTimer: NodeJS.Timeout | null = null;
 const devServerUrl = process.env.ELECTRON_START_URL;
 const widgetBounds = {
   expanded: {
-    width: 340,
-    height: 190,
+    width: 360,
+    height: 230,
   },
   collapsed: {
     width: 220,
@@ -23,22 +23,22 @@ function createClockIcon() {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
       <defs>
-        <linearGradient id="bg" x1="38" y1="26" x2="224" y2="236">
+        <radialGradient id="bg" cx="35%" cy="28%" r="74%">
           <stop stop-color="#3f3f46"/>
-          <stop offset="0.52" stop-color="#18181b"/>
+          <stop offset="0.58" stop-color="#18181b"/>
           <stop offset="1" stop-color="#09090b"/>
-        </linearGradient>
+        </radialGradient>
         <linearGradient id="accent" x1="74" y1="42" x2="190" y2="220">
           <stop stop-color="#fb7185"/>
           <stop offset="1" stop-color="#b91c1c"/>
         </linearGradient>
       </defs>
-      <rect width="256" height="256" rx="58" fill="url(#bg)"/>
-      <circle cx="128" cy="128" r="86" fill="#27272a" stroke="url(#accent)" stroke-width="16"/>
-      <circle cx="128" cy="128" r="62" fill="#18181b" opacity="0.58"/>
+      <circle cx="128" cy="128" r="116" fill="url(#bg)"/>
+      <circle cx="128" cy="128" r="91" fill="#27272a" stroke="url(#accent)" stroke-width="16"/>
+      <circle cx="128" cy="128" r="63" fill="#18181b" opacity="0.64"/>
       <path d="M128 72v60l42 28" fill="none" stroke="#fafafa" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
       <circle cx="128" cy="128" r="10" fill="#fb7185"/>
-      <path d="M71 203c21 18 48 28 78 24 42-5 74-35 87-74" fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+      <path d="M62 203c23 21 55 32 89 28 45-5 81-37 94-79" fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="round" opacity="0.34"/>
     </svg>
   `;
 
@@ -230,6 +230,11 @@ ipcMain.handle("widget:set-collapsed", (_event, collapsed: boolean) => {
 });
 
 app.whenReady().then(() => {
+  app.setName("Time Tracker");
+  if (process.platform === "win32") {
+    app.setAppUserModelId("com.time-tracker.app");
+  }
+
   if (process.platform === "darwin") {
     app.dock?.setIcon(clockIcon);
   }

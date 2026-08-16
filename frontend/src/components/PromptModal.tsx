@@ -113,7 +113,7 @@ export function PromptModal({ active, onDismiss, onSubmit, onStop }: PromptModal
             {submitting ? "Starting..." : active ? "Update timer" : "Start timer"}
           </button>
           <button className="secondary" onClick={onDismiss} type="button">
-            Remind me later
+            Cancel
           </button>
           {active && (
             <button className="danger" onClick={onStop} type="button">

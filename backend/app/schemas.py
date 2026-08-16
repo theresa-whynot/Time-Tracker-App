@@ -12,11 +12,14 @@ class WorkPrompt(BaseModel):
 
 
 class EntryUpdate(BaseModel):
+    client_name: Optional[str] = Field(default=None, max_length=120)
     description: Optional[str] = Field(default=None, max_length=500)
     notes: Optional[str] = Field(default=None, max_length=1000)
+    project_name: Optional[str] = Field(default=None, max_length=120)
     started_at: Optional[datetime] = None
     ended_at: Optional[datetime] = None
     seconds_adjustment: Optional[int] = None
+    task_name: Optional[str] = Field(default=None, max_length=120)
 
 
 class ManualTimeEntryCreate(BaseModel):

@@ -15,9 +15,8 @@ export function summaryToCsv(summary: Summary): string {
     "client",
     "project",
     "task",
-    "duration_seconds",
+    "duration_minutes",
     "duration_hours",
-    "entry_ids",
   ];
 
   const rows = summary.buckets.map((bucket) => [
@@ -26,9 +25,8 @@ export function summaryToCsv(summary: Summary): string {
     bucket.client_name,
     bucket.project_name,
     bucket.task_name,
-    bucket.duration_seconds,
+    (bucket.duration_seconds / 60).toFixed(2),
     (bucket.duration_seconds / 3600).toFixed(2),
-    bucket.entry_ids.join("|"),
   ]);
 
   return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\n");
