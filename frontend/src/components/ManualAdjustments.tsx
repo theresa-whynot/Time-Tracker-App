@@ -1,5 +1,6 @@
 import type { Summary } from "../api";
 import { EntryAdjustmentRow } from "./EntryAdjustmentRow";
+import { ManualTimeEntryForm } from "./ManualTimeEntryForm";
 
 interface ManualAdjustmentsProps {
   daySummary: Summary | null;
@@ -13,11 +14,12 @@ export function ManualAdjustments({ daySummary, onEntrySaved }: ManualAdjustment
         <div>
           <h2>Manual adjustments</h2>
           <p className="muted">
-            Review the minutes already logged for each entry and edit the total if it
-            needs to be corrected.
+            Review existing entries, add missed time blocks, or delete entries that should
+            not count.
           </p>
         </div>
       </div>
+      <ManualTimeEntryForm periodStart={daySummary?.start} onSaved={onEntrySaved} />
       {daySummary?.entries.length ? (
         <div className="entry-list">
           {daySummary.entries.map((entry) => (

@@ -5,8 +5,9 @@ from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from ..models import Client, Project, Task, TimeEntry, utc_now
-from ..schemas import EntryUpdate
+from ..schemas import EntryUpdate, ManualTimeEntryCreate
 from ..utils.datetime import as_utc
+from .catalog import get_or_create_client, get_or_create_project, get_or_create_task
 
 
 def entry_duration_seconds(entry: TimeEntry, now: Optional[datetime] = None) -> int:
@@ -76,3 +77,41 @@ def update_time_entry(
     session.commit()
     session.refresh(entry)
     return entry_payload(session, entry)
+
+
+def create_manual_time_entry(
+    session: Session,
+    manual_entry: ManualTimeEntryCreate,
+) -> dict[str, Any]:
+    if as_utc(manual_entry.ended_at) < as_utc(manual_entry.started_at):
+        raise HTTPException(status_code=422, detail="Entry end time cannot be before start time.")
+
+    now = utc_now()
+    client = get_or_create_client(session, manual_entry.client_name)
+    project = get_or_create_project(session, client.id, manual_entry.project_name)
+    task = get_or_create_task(session, project.id, manual_entry.task_name)
+
+    entry = TimeEntry(
+        client_id=client.id,
+        project_id=project.id,
+        task_id=task.id,
+        description=manual_entry.description.strip(),
+        notes=manual_entry.notes.strip(),
+        started_at=manual_entry.started_at,
+        ended_at=manual_entry.ended_at,
+        created_at=now,
+        updated_at=now,
+    )
+    session.add(entry)
+    session.commit()
+    session.refresh(entry)
+    return entry_payload(session, entry)
+
+
+def delete_time_entry(session: Session, entry_id: int) -> None:
+    entry = session.get(TimeEntry, entry_id)
+    if not entry:
+        raise HTTPException(status_code=404, detail="Time entry not found.")
+
+    session.delete(entry)
+    session.commit()

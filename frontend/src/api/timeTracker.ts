@@ -50,6 +50,16 @@ export interface EntryUpdate {
   seconds_adjustment?: number;
 }
 
+export interface ManualTimeEntryCreate {
+  client_name: string;
+  project_name: string;
+  task_name: string;
+  description: string;
+  notes: string;
+  started_at: string;
+  ended_at: string;
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
@@ -100,5 +110,18 @@ export function updateTimeEntry(entryId: number, update: EntryUpdate): Promise<T
   return request<TimeEntry>(`/time-entries/${entryId}`, {
     method: "PATCH",
     body: JSON.stringify(update),
+  });
+}
+
+export function createManualTimeEntry(manualEntry: ManualTimeEntryCreate): Promise<TimeEntry> {
+  return request<TimeEntry>("/time-entries/manual", {
+    method: "POST",
+    body: JSON.stringify(manualEntry),
+  });
+}
+
+export function deleteTimeEntry(entryId: number): Promise<void> {
+  return request<void>(`/time-entries/${entryId}`, {
+    method: "DELETE",
   });
 }

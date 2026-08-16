@@ -2,37 +2,9 @@ import { FormEvent, useEffect, useState } from "react";
 
 import type { TimeEntry, WorkPrompt } from "../api";
 import { DEFAULT_PROJECT_NAME } from "../config";
+import { loadSavedClients, saveClientName } from "../utils/savedClients";
 
 type PromptForm = Omit<WorkPrompt, "project_name">;
-const savedClientsKey = "timeTracker.savedClients";
-
-function loadSavedClients(): string[] {
-  try {
-    const value = window.localStorage.getItem(savedClientsKey);
-    const parsed = value ? JSON.parse(value) : [];
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed.filter((client): client is string => typeof client === "string");
-  } catch {
-    return [];
-  }
-}
-
-function saveClientName(clientName: string, existingClients: string[]): string[] {
-  const cleaned = clientName.trim();
-  if (!cleaned) {
-    return existingClients;
-  }
-
-  const withoutDuplicate = existingClients.filter(
-    (client) => client.toLowerCase() !== cleaned.toLowerCase(),
-  );
-  const nextClients = [cleaned, ...withoutDuplicate].sort((a, b) => a.localeCompare(b));
-  window.localStorage.setItem(savedClientsKey, JSON.stringify(nextClients));
-  return nextClients;
-}
 
 function emptyPrompt(): PromptForm {
   return {
@@ -58,6 +30,8 @@ export function PromptModal({ active, onDismiss, onSubmit, onStop }: PromptModal
     description: active?.description ?? "",
   }));
   const [submitting, setSubmitting] = useState(false);
+  const [dictating, setDictating] = useState(false);
+  const [speechError, setSpeechError] = useState<string | null>(null);
 
   useEffect(() => {
     if (active?.client_name) {
@@ -81,6 +55,48 @@ export function PromptModal({ active, onDismiss, onSubmit, onStop }: PromptModal
 
   function updateField(field: keyof PromptForm, value: string) {
     setPrompt((current) => ({ ...current, [field]: value }));
+  }
+
+  function handleDictateDescription() {
+    const SpeechRecognitionConstructor =
+      window.SpeechRecognition ?? window.webkitSpeechRecognition;
+
+    if (!SpeechRecognitionConstructor) {
+      setSpeechError("Voice dictation is not supported in this environment.");
+      return;
+    }
+
+    const recognition = new SpeechRecognitionConstructor();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setDictating(true);
+      setSpeechError(null);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0]?.[0]?.transcript?.trim();
+      if (!transcript) {
+        return;
+      }
+
+      setPrompt((current) => ({
+        ...current,
+        description: current.description ? `${current.description} ${transcript}` : transcript,
+      }));
+    };
+
+    recognition.onerror = () => {
+      setSpeechError("Unable to capture speech. Check microphone permissions and try again.");
+    };
+
+    recognition.onend = () => {
+      setDictating(false);
+    };
+
+    recognition.start();
   }
 
   return (
@@ -128,12 +144,23 @@ export function PromptModal({ active, onDismiss, onSubmit, onStop }: PromptModal
           />
         </label>
         <label>
-          Notes
+          <div className="field-heading">
+            <span>Task description</span>
+            <button
+              className="secondary voice-button"
+              disabled={dictating}
+              onClick={handleDictateDescription}
+              type="button"
+            >
+              {dictating ? "Listening..." : "Dictate"}
+            </button>
+          </div>
           <textarea
             value={prompt.description}
             onChange={(event) => updateField("description", event.target.value)}
-            placeholder="Optional detail about this work block"
+            placeholder="Describe what you are working on"
           />
+          {speechError && <small className="field-error">{speechError}</small>}
         </label>
 
         <div className="prompt-actions">

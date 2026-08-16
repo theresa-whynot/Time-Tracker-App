@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type { TimeEntry } from "../api";
-import { updateTimeEntry } from "../api";
+import { deleteTimeEntry, updateTimeEntry } from "../api";
 import { DEFAULT_PROJECT_NAME } from "../config";
 import { formatDateTime, wholeMinutesFromSeconds } from "../utils/formatters";
 
@@ -19,6 +19,7 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
     wholeMinutesFromSeconds(entry.duration_seconds).toString(),
   );
   const [notes, setNotes] = useState(entry.notes);
+  const [deleting, setDeleting] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -41,6 +42,22 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
       await onSaved();
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    const confirmed = window.confirm("Delete this time block?");
+    if (!confirmed) {
+      return;
+    }
+
+    setDeleting(true);
+    try {
+      await deleteTimeEntry(entry.id);
+      await onSaved();
+      await window.timeTracker?.notifyTimerChanged();
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -76,6 +93,9 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
       </label>
       <button className="secondary" disabled={saving} onClick={handleSave} type="button">
         {saving ? "Saving..." : "Save"}
+      </button>
+      <button className="danger" disabled={deleting} onClick={handleDelete} type="button">
+        {deleting ? "Deleting..." : "Delete"}
       </button>
     </article>
   );
