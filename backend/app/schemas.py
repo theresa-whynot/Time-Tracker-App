@@ -17,6 +17,7 @@ class EntryUpdate(BaseModel):
     started_at: Optional[datetime] = None
     ended_at: Optional[datetime] = None
     seconds_adjustment: Optional[int] = None
+    task_name: Optional[str] = Field(default=None, max_length=120)
 
 
 class ManualTimeEntryCreate(BaseModel):

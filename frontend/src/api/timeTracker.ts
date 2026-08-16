@@ -48,6 +48,7 @@ export interface EntryUpdate {
   started_at?: string;
   ended_at?: string | null;
   seconds_adjustment?: number;
+  task_name?: string;
 }
 
 export interface ManualTimeEntryCreate {

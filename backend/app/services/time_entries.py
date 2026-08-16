@@ -66,8 +66,16 @@ def update_time_entry(
         raise HTTPException(status_code=404, detail="Time entry not found.")
 
     data = update.model_dump(exclude_unset=True)
+    task_name = data.pop("task_name", None)
     for field, value in data.items():
         setattr(entry, field, value if not isinstance(value, str) else value.strip())
+
+    if task_name is not None:
+        cleaned_task_name = task_name.strip()
+        if not cleaned_task_name:
+            raise HTTPException(status_code=422, detail="Task name cannot be blank.")
+        task = get_or_create_task(session, entry.project_id, cleaned_task_name)
+        entry.task_id = task.id
 
     if entry.ended_at and as_utc(entry.ended_at) < as_utc(entry.started_at):
         raise HTTPException(status_code=422, detail="Entry end time cannot be before start time.")
