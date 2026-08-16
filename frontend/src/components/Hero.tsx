@@ -9,21 +9,22 @@ export function Hero({ promptIntervalMinutes }: HeroProps) {
         <div className="hero-icon" aria-hidden="true">
           <span />
         </div>
-        <p className="eyebrow">Client & task timekeeping</p>
+        <p className="eyebrow">ClearHours</p>
       </div>
 
       <div className="hero-copy">
-        <h1>Stay focused. Capture every billable minute.</h1>
+        <h1>Clean time tracking. Nothing creepy. Nothing extra.</h1>
         <p>
-          A quiet desktop timer that keeps client work organized, nudges you every{" "}
-          {promptIntervalMinutes} minutes, and turns your day into clean summaries.
+          Track client and task time without screenshots, surveillance, or bloated dashboards.
+          ClearHours keeps the timer close, nudges you every {promptIntervalMinutes} minutes,
+          and turns your workday into simple summaries.
         </p>
       </div>
 
       <div className="hero-highlights" aria-label="Product highlights">
-        <span>Live timer</span>
-        <span>Client history</span>
-        <span>CSV summaries</span>
+        <span>No screen monitoring</span>
+        <span>No bloat</span>
+        <span>Clean CSV summaries</span>
       </div>
     </header>
   );

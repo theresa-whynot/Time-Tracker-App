@@ -1,7 +1,7 @@
-# Time-Tracker-App
+# ClearHours
 
-Starting point for a desktop time tracker that records work by client, project,
-and task.
+Clean, no-frills desktop time tracking for client and task work. No screenshots,
+no screen monitoring, and no confusing extras.
 
 ## Stack
 
