@@ -187,7 +187,7 @@ function createWidgetWindow() {
     resizable: false,
     maximizable: false,
     minimizable: false,
-    movable: false,
+    movable: true,
     alwaysOnTop: true,
     icon: clockIcon,
     skipTaskbar: true,

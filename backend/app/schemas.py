@@ -17,3 +17,13 @@ class EntryUpdate(BaseModel):
     started_at: Optional[datetime] = None
     ended_at: Optional[datetime] = None
     seconds_adjustment: Optional[int] = None
+
+
+class ManualTimeEntryCreate(BaseModel):
+    client_name: str = Field(min_length=1, max_length=120)
+    project_name: str = Field(default="General", min_length=1, max_length=120)
+    task_name: str = Field(min_length=1, max_length=120)
+    description: str = Field(default="", max_length=500)
+    notes: str = Field(default="", max_length=1000)
+    started_at: datetime
+    ended_at: datetime
