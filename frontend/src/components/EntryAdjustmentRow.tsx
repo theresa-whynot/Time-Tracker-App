@@ -4,6 +4,7 @@ import type { TimeEntry } from "../api";
 import { deleteTimeEntry, updateTimeEntry } from "../api";
 import { DEFAULT_PROJECT_NAME } from "../config";
 import { wholeMinutesFromSeconds } from "../utils/formatters";
+import { loadSavedClients, saveClientName } from "../utils/savedClients";
 
 interface EntryAdjustmentRowProps {
   entry: TimeEntry;
@@ -35,12 +36,15 @@ function durationSecondsBetween(startedAt: string, endedAt: string): number {
 }
 
 export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) {
+  const [clientName, setClientName] = useState(entry.client_name);
+  const [description, setDescription] = useState(entry.description);
   const [endedAt, setEndedAt] = useState(toDateTimeLocalValue(entry.ended_at));
   const [loggedMinutes, setLoggedMinutes] = useState(
     wholeMinutesFromSeconds(entry.duration_seconds).toString(),
   );
   const [notes, setNotes] = useState(entry.notes);
   const [deleting, setDeleting] = useState(false);
+  const [savedClients, setSavedClients] = useState<string[]>(() => loadSavedClients());
   const [saving, setSaving] = useState(false);
   const [startedAt, setStartedAt] = useState(toDateTimeLocalValue(entry.started_at));
   const [taskName, setTaskName] = useState(entry.task_name);
@@ -51,12 +55,22 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
   );
 
   useEffect(() => {
+    setClientName(entry.client_name);
+    setDescription(entry.description);
     setEndedAt(toDateTimeLocalValue(entry.ended_at));
     setLoggedMinutes(wholeMinutesFromSeconds(entry.duration_seconds).toString());
     setNotes(entry.notes);
     setStartedAt(toDateTimeLocalValue(entry.started_at));
     setTaskName(entry.task_name);
-  }, [entry.duration_seconds, entry.ended_at, entry.notes, entry.started_at, entry.task_name]);
+  }, [
+    entry.client_name,
+    entry.description,
+    entry.duration_seconds,
+    entry.ended_at,
+    entry.notes,
+    entry.started_at,
+    entry.task_name,
+  ]);
 
   function updateStartedAt(value: string) {
     setStartedAt(value);
@@ -73,8 +87,8 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
   }
 
   async function handleSave() {
-    if (!taskName.trim() || !startedAt || !endedAt) {
-      window.alert("Task, start, and end are required.");
+    if (!clientName.trim() || !taskName.trim() || !startedAt || !endedAt) {
+      window.alert("Client, task, start, and end are required.");
       return;
     }
 
@@ -90,8 +104,12 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
 
     setSaving(true);
     try {
+      setSavedClients((clients) => saveClientName(clientName, clients));
       await updateTimeEntry(entry.id, {
+        client_name: clientName,
+        description,
         ended_at: toIsoDateTime(endedAt),
+        project_name: entry.project_name || DEFAULT_PROJECT_NAME,
         seconds_adjustment: requestedTotalSeconds - baseDurationSeconds,
         started_at: toIsoDateTime(startedAt),
         task_name: taskName,
@@ -122,6 +140,21 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
   return (
     <article className="entry-row">
       <label>
+        Client
+        <input
+          list={`saved-clients-${entry.id}`}
+          required
+          value={clientName}
+          onChange={(event) => setClientName(event.target.value)}
+          placeholder="Client name"
+        />
+        <datalist id={`saved-clients-${entry.id}`}>
+          {savedClients.map((client) => (
+            <option key={client} value={client} />
+          ))}
+        </datalist>
+      </label>
+      <label>
         Task
         <input
           required
@@ -129,11 +162,6 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
           onChange={(event) => setTaskName(event.target.value)}
           placeholder="Task name"
         />
-        <small>
-          {entry.project_name === DEFAULT_PROJECT_NAME
-            ? entry.client_name
-            : `${entry.client_name} / ${entry.project_name}`}
-        </small>
       </label>
       <label>
         Start
@@ -160,6 +188,14 @@ export function EntryAdjustmentRow({ entry, onSaved }: EntryAdjustmentRowProps) 
           min="0"
           value={loggedMinutes}
           onChange={(event) => setLoggedMinutes(event.target.value)}
+        />
+      </label>
+      <label>
+        Description
+        <input
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+          placeholder="Optional description"
         />
       </label>
       <label>

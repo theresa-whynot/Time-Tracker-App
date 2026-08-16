@@ -66,15 +66,34 @@ def update_time_entry(
         raise HTTPException(status_code=404, detail="Time entry not found.")
 
     data = update.model_dump(exclude_unset=True)
+    client_name = data.pop("client_name", None)
+    project_name = data.pop("project_name", None)
     task_name = data.pop("task_name", None)
     for field, value in data.items():
         setattr(entry, field, value if not isinstance(value, str) else value.strip())
 
-    if task_name is not None:
-        cleaned_task_name = task_name.strip()
-        if not cleaned_task_name:
+    if client_name is not None or project_name is not None or task_name is not None:
+        current_client = session.get(Client, entry.client_id)
+        current_project = session.get(Project, entry.project_id)
+        current_task = session.get(Task, entry.task_id)
+        next_client_name = client_name if client_name is not None else current_client.name if current_client else ""
+        next_project_name = (
+            project_name if project_name is not None else current_project.name if current_project else "General"
+        )
+        next_task_name = task_name if task_name is not None else current_task.name if current_task else ""
+
+        if not next_client_name.strip():
+            raise HTTPException(status_code=422, detail="Client name cannot be blank.")
+        if not next_project_name.strip():
+            raise HTTPException(status_code=422, detail="Project name cannot be blank.")
+        if not next_task_name.strip():
             raise HTTPException(status_code=422, detail="Task name cannot be blank.")
-        task = get_or_create_task(session, entry.project_id, cleaned_task_name)
+
+        client = get_or_create_client(session, next_client_name)
+        project = get_or_create_project(session, client.id, next_project_name)
+        task = get_or_create_task(session, project.id, next_task_name)
+        entry.client_id = client.id
+        entry.project_id = project.id
         entry.task_id = task.id
 
     if entry.ended_at and as_utc(entry.ended_at) < as_utc(entry.started_at):

@@ -43,8 +43,10 @@ export interface Summary {
 }
 
 export interface EntryUpdate {
+  client_name?: string;
   description?: string;
   notes?: string;
+  project_name?: string;
   started_at?: string;
   ended_at?: string | null;
   seconds_adjustment?: number;
